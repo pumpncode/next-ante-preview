@@ -1,0 +1,11 @@
+{
+    "id": "AntePreview",
+    "name": "Next Ante Preview",
+    "author": [
+        "DigitalDetective47"
+    ],
+    "description": "Shows a preview of the next ante on the Boss Blind's cash out screen.",
+    "prefix": "nap",
+    "main_file": "main.lua",
+    "version": "1.0.0~0c09a"
+}
