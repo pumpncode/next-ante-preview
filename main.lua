@@ -91,7 +91,7 @@ function G.FUNCS.evaluate_round()
     if G.GAME.blind.boss then
         G.E_MANAGER:add_event(Event({
             func = function()
-                local random_state = copy_table2(G.GAME.pseudorandom)
+                local random_state = copy_table(G.GAME.pseudorandom)
                 G.round_eval:add_child(
                     {
                         n = G.UIT.R,
