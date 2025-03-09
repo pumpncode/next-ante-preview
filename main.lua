@@ -18,7 +18,7 @@ function create_ante_preview()
                     n = G.UIT.R,
                     config = { align = "cl" },
                     nodes = {
-                        { n = G.UIT.R, nodes = { { n = G.UIT.T, config = { text = number_format(blind_amt), colour = G.C.RED, scale = score_number_scale(0.8, blind_amt) } } } },
+                        { n = G.UIT.R, config = { align = "ct" }, nodes = { { n = G.UIT.O, config = { object = get_stake_sprite(G.GAME.stake, 0.4) } }, { n = G.UIT.T, config = { text = number_format(blind_amt), colour = G.C.RED, scale = score_number_scale(0.8, blind_amt) } } } },
                         {
                             n = G.UIT.C,
                             config = { align = "cm" },
@@ -51,7 +51,7 @@ function create_ante_preview()
                     n = G.UIT.R,
                     config = { align = "cl" },
                     nodes = {
-                        { n = G.UIT.R, nodes = { { n = G.UIT.T, config = { text = number_format(blind_amt), colour = G.C.RED, scale = score_number_scale(0.8, blind_amt) } } } },
+                        { n = G.UIT.R, config = { align = "ct" }, nodes = { { n = G.UIT.O, config = { object = get_stake_sprite(G.GAME.stake, 0.4) } }, { n = G.UIT.T, config = { text = number_format(blind_amt), colour = G.C.RED, scale = score_number_scale(0.8, blind_amt) } } } },
                         {
                             n = G.UIT.C,
                             config = { align = "cm" },
@@ -79,7 +79,7 @@ function create_ante_preview()
             n = G.UIT.C,
             nodes = {
                 { n = G.UIT.O, config = { object = blind_sprite } },
-                { n = G.UIT.R, nodes = { { n = G.UIT.T, config = { text = number_format(blind_amt), colour = G.C.RED, scale = score_number_scale(0.8, blind_amt) } }, } },
+                { n = G.UIT.R, config = { align = "ct" },         nodes = { { n = G.UIT.O, config = { object = get_stake_sprite(G.GAME.stake, 0.4) } }, { n = G.UIT.T, config = { text = number_format(blind_amt), colour = G.C.RED, scale = score_number_scale(0.8, blind_amt) } }, } },
             }
         },
         G.round_eval:get_UIE_by_ID("next_ante_preview"))
