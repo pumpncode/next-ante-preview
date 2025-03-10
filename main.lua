@@ -56,7 +56,7 @@ end
 local evaluate_round_hook = G.FUNCS.evaluate_round
 function G.FUNCS.evaluate_round()
     evaluate_round_hook()
-    if G.GAME.blind.boss then
+    if G.GAME.blind_on_deck == "Boss" then
         G.E_MANAGER:add_event(Event({
             func = function()
                 G.round_eval:add_child(
