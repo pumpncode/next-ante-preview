@@ -7,13 +7,13 @@
     "description": "Shows a preview of the next ante on the Boss Blind's cash out screen.",
     "prefix": "nap",
     "main_file": "main.lua",
-    "version": "1.1.3",
+    "version": "1.1.3a",
     "priority": -1e6,
     "dependencies": [
         "Steamodded (>=1.0.0~ALPHA-1021a)"
     ],
     "conflicts": [
-        "Cryptid",
+        "Cryptid (<<0.5.5a~dev)",
         "ortalab"
     ]
 }
