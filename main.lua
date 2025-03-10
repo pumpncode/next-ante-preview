@@ -12,42 +12,44 @@ function create_ante_preview()
     local prediction = predict_next_ante()
     G.GAME.pseudorandom = random_state
     for _, choice in ipairs({ "Small", "Big", "Boss" }) do
-        local blind = G.P_BLINDS[prediction[choice].blind]
-        local blind_sprite = AnimatedSprite(0, 0, 1, 1,
-            G.ANIMATION_ATLAS[blind.atlas] or G.ANIMATION_ATLAS.blind_chips, blind.pos)
-        blind_sprite:define_draw_steps({ { shader = 'dissolve', shadow_height = 0.05 }, { shader = 'dissolve' } })
-        local blind_amt = get_blind_amount(G.GAME.round_resets.blind_ante + 1)
-            * blind.mult * G.GAME.starting_params.ante_scaling
-        local tag = G.P_TAGS[prediction[choice].tag]
-        local tag_sprite
-        if tag then
-            tag_sprite = Sprite(0, 0, 0.4, 0.4, G.ASSET_ATLAS[tag.atlas] or G.ASSET_ATLAS.tags, tag.pos)
-            tag_sprite:define_draw_steps({ { shader = 'dissolve', shadow_height = 0.05 }, { shader = 'dissolve' } })
+        if prediction[choice] then
+            local blind = G.P_BLINDS[prediction[choice].blind]
+            local blind_sprite = AnimatedSprite(0, 0, 1, 1,
+                G.ANIMATION_ATLAS[blind.atlas] or G.ANIMATION_ATLAS.blind_chips, blind.pos)
+            blind_sprite:define_draw_steps({ { shader = 'dissolve', shadow_height = 0.05 }, { shader = 'dissolve' } })
+            local blind_amt = get_blind_amount(G.GAME.round_resets.blind_ante + 1)
+                * blind.mult * G.GAME.starting_params.ante_scaling
+            local tag = G.P_TAGS[prediction[choice].tag]
+            local tag_sprite
+            if tag then
+                tag_sprite = Sprite(0, 0, 0.4, 0.4, G.ASSET_ATLAS[tag.atlas] or G.ASSET_ATLAS.tags, tag.pos)
+                tag_sprite:define_draw_steps({ { shader = 'dissolve', shadow_height = 0.05 }, { shader = 'dissolve' } })
+            end
+            G.round_eval:add_child(
+                {
+                    n = G.UIT.C,
+                    nodes = {
+                        { n = G.UIT.O, config = { object = blind_sprite } },
+                        {
+                            n = G.UIT.R,
+                            config = { align = "cl" },
+                            nodes = {
+                                { n = G.UIT.R, config = { align = "ct" }, nodes = { { n = G.UIT.O, config = { object = get_stake_sprite(G.GAME.stake, 0.4) } }, { n = G.UIT.T, config = { text = number_format(blind_amt), colour = G.C.RED, scale = score_number_scale(0.8, blind_amt) } } } },
+                                tag and {
+                                    n = G.UIT.C,
+                                    config = { align = "cm" },
+                                    nodes = {
+                                        { n = G.UIT.T, config = { text = "or ", colour = G.C.WHITE, scale = 0.4 } },
+                                        { n = G.UIT.O, config = { object = tag_sprite } },
+                                    }
+                                },
+                            }
+                        },
+                        { n = G.UIT.B, config = { h = 0, w = 1 } },
+                    }
+                },
+                G.round_eval:get_UIE_by_ID("next_ante_preview"))
         end
-        G.round_eval:add_child(
-            {
-                n = G.UIT.C,
-                nodes = {
-                    { n = G.UIT.O, config = { object = blind_sprite } },
-                    {
-                        n = G.UIT.R,
-                        config = { align = "cl" },
-                        nodes = {
-                            { n = G.UIT.R, config = { align = "ct" }, nodes = { { n = G.UIT.O, config = { object = get_stake_sprite(G.GAME.stake, 0.4) } }, { n = G.UIT.T, config = { text = number_format(blind_amt), colour = G.C.RED, scale = score_number_scale(0.8, blind_amt) } } } },
-                            tag and {
-                                n = G.UIT.C,
-                                config = { align = "cm" },
-                                nodes = {
-                                    { n = G.UIT.T, config = { text = "or ", colour = G.C.WHITE, scale = 0.4 } },
-                                    { n = G.UIT.O, config = { object = tag_sprite } },
-                                }
-                            },
-                        }
-                    },
-                    { n = G.UIT.B, config = { h = 0, w = 1 } },
-                }
-            },
-            G.round_eval:get_UIE_by_ID("next_ante_preview"))
     end
     local all_blind_uis = G.round_eval:get_UIE_by_ID("next_ante_preview").children
     table.remove(all_blind_uis[#all_blind_uis])
