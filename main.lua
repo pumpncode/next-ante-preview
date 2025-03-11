@@ -25,34 +25,44 @@ function create_ante_preview()
                 tag_sprite = Sprite(0, 0, 0.4, 0.4, G.ASSET_ATLAS[tag.atlas] or G.ASSET_ATLAS.tags, tag.pos)
                 tag_sprite:define_draw_steps({ { shader = 'dissolve', shadow_height = 0.05 }, { shader = 'dissolve' } })
             end
-            G.round_eval:add_child(
-                {
+            G.round_eval:add_child({
                     n = G.UIT.C,
-                    nodes = {
-                        { n = G.UIT.O, config = { object = blind_sprite } },
-                        {
-                            n = G.UIT.R,
-                            config = { align = "cl" },
-                            nodes = {
-                                { n = G.UIT.R, config = { align = "ct" }, nodes = { { n = G.UIT.O, config = { object = get_stake_sprite(G.GAME.stake, 0.4) } }, { n = G.UIT.T, config = { text = number_format(blind_amt), colour = G.C.RED, scale = score_number_scale(0.8, blind_amt) } } } },
-                                tag and {
-                                    n = G.UIT.C,
-                                    config = { align = "cm" },
-                                    nodes = {
-                                        { n = G.UIT.T, config = { text = "or ", colour = G.C.WHITE, scale = 0.4 } },
-                                        { n = G.UIT.O, config = { object = tag_sprite } },
-                                    }
+                    nodes = { {
+                        n = G.UIT.R,
+                        nodes = {
+                            { n = G.UIT.O, config = { object = blind_sprite } },
+                            {
+                                n = G.UIT.C,
+                                nodes = {
+                                    {
+                                        n = G.UIT.R,
+                                        config = { align = "cl" },
+                                        nodes = {
+                                            { n = G.UIT.O, config = { object = get_stake_sprite(G.GAME.stake, 0.4) } },
+                                            { n = G.UIT.T, config = { text = number_format(blind_amt), colour = G.C.RED, scale = score_number_scale(0.8, blind_amt) } }
+                                        }
+                                    },
+                                    tag and {
+                                        n = G.UIT.R,
+                                        config = { align = "cl" },
+                                        nodes = {
+                                            { n = G.UIT.T, config = { text = "or ", colour = G.C.WHITE, scale = 0.4 } },
+                                            { n = G.UIT.O, config = { object = tag_sprite } },
+
+                                        }
+                                    },
                                 },
-                            }
-                        },
-                        { n = G.UIT.B, config = { h = 0, w = 1 } },
-                    }
+                            },
+                        }
+                    } }
                 },
                 G.round_eval:get_UIE_by_ID("next_ante_preview"))
+            if choice ~= "Boss" then
+                G.round_eval:add_child({ n = G.UIT.B, config = { w = 0.25, h = 0 } },
+                    G.round_eval:get_UIE_by_ID("next_ante_preview"))
+            end
         end
     end
-    local all_blind_uis = G.round_eval:get_UIE_by_ID("next_ante_preview").children
-    table.remove(all_blind_uis[#all_blind_uis])
 end
 
 local evaluate_round_hook = G.FUNCS.evaluate_round
@@ -63,11 +73,11 @@ function G.FUNCS.evaluate_round()
             func = function()
                 G.round_eval:add_child(
                     {
-                        n = G.UIT.R,
-                        config = { padding = 0.1, r = 0.1, colour = G.C.BLACK, emboss = 0.05 },
+                        n = G.UIT.C,
+                        config = { r = 0.1, colour = G.C.BLACK, emboss = 0.05 },
                         nodes = {
-                            { n = G.UIT.R, nodes = { { n = G.UIT.T, config = { text = "Next Ante:", colour = G.C.WHITE, scale = 0.5 } } } },
-                            { n = G.UIT.C, config = { id = "next_ante_preview" } },
+                            { n = G.UIT.R, config = { padding = 0.1 },                          nodes = { { n = G.UIT.T, config = { text = "Next Ante:", colour = G.C.WHITE, scale = 0.5 } } } },
+                            { n = G.UIT.R, config = { id = "next_ante_preview", padding = 0.1 } },
                         }
                     },
                     G.round_eval:get_UIE_by_ID("eval_bottom"))
