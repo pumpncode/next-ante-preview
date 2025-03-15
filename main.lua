@@ -10,7 +10,6 @@ function create_ante_preview()
     G.round_eval:get_UIE_by_ID("next_ante_preview").children = {}
     local random_state = copy_table(G.GAME.pseudorandom)
     local prediction = predict_next_ante()
-    G.GAME.pseudorandom = random_state
     for _, choice in ipairs({ "Small", "Big", "Boss" }) do
         if prediction[choice] then
             local blind = G.P_BLINDS[prediction[choice].blind]
@@ -19,11 +18,18 @@ function create_ante_preview()
             blind_sprite:define_draw_steps({ { shader = 'dissolve', shadow_height = 0.05 }, { shader = 'dissolve' } })
             local blind_amt = get_blind_amount(G.GAME.round_resets.blind_ante + 1)
                 * blind.mult * G.GAME.starting_params.ante_scaling
-            local tag = G.P_TAGS[prediction[choice].tag]
+            local tag = prediction[choice].tag
             local tag_sprite
             if tag then
-                tag_sprite = Sprite(0, 0, 0.4, 0.4, G.ASSET_ATLAS[tag.atlas] or G.ASSET_ATLAS.tags, tag.pos)
-                tag_sprite:define_draw_steps({ { shader = 'dissolve', shadow_height = 0.05 }, { shader = 'dissolve' } })
+                local tag_object
+                local hands = {} -- Orbital tag is weird as hell
+                for k, v in pairs(G.GAME.hands) do
+                    if v.visible then table.insert(hands, k) end
+                end
+                G.orbital_hand = pseudorandom_element(hands, pseudoseed('orbital'))
+                tag_object = Tag(tag, nil, choice)
+                G.orbital_hand = nil
+                _, tag_sprite = tag_object:generate_UI(0.4)
             end
             G.round_eval:add_child({
                     n = G.UIT.C,
@@ -47,8 +53,7 @@ function create_ante_preview()
                                         config = { align = "cl" },
                                         nodes = {
                                             { n = G.UIT.T, config = { text = "or ", colour = G.C.WHITE, scale = 0.4 } },
-                                            { n = G.UIT.O, config = { object = tag_sprite } },
-
+                                            { n = G.UIT.O, config = { id = "tag_sprite", object = tag_sprite } },
                                         }
                                     },
                                 },
@@ -63,6 +68,7 @@ function create_ante_preview()
             end
         end
     end
+    G.GAME.pseudorandom = random_state
 end
 
 local evaluate_round_hook = G.FUNCS.evaluate_round
