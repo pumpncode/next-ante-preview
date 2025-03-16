@@ -18,6 +18,15 @@ SMODS.Blind:take_ownership("ox", {
     end
 }, true)
 
+SMODS.Tag:take_ownership("orbital", {
+    preview_ui = function(self)
+        local hand_center = SMODS.PokerHands[self.ability.orbital_hand]
+        local hand_sprite = Sprite(0, 0, 1, 0.13 / 0.53,
+            G.ASSET_ATLAS[hand_center.atlas or "nap_poker_hands"], hand_center.pos or { x = 0, y = 0 })
+        return { n = G.UIT.O, config = { object = hand_sprite } }
+    end
+}, true)
+
 SMODS.Atlas({
     key = "poker_hands",
     path = "hands.png",
@@ -86,6 +95,7 @@ function create_ante_preview()
                 * blind.mult * G.GAME.starting_params.ante_scaling
             local tag = prediction[choice].tag
             local tag_sprite
+            local tag_preview_ui
             if tag then
                 local tag_object
                 local hands = {} -- Orbital tag is weird as hell
@@ -96,6 +106,7 @@ function create_ante_preview()
                 tag_object = Tag(tag, nil, choice)
                 G.orbital_hand = nil
                 _, tag_sprite = tag_object:generate_UI(0.4)
+                tag_preview_ui = G.P_TAGS[tag].preview_ui and G.P_TAGS[tag].preview_ui(tag_object)
             end
             G.round_eval:add_child({
                     n = G.UIT.C,
@@ -126,6 +137,7 @@ function create_ante_preview()
                                         nodes = {
                                             { n = G.UIT.T, config = { text = "or ", colour = G.C.WHITE, scale = 0.4 } },
                                             { n = G.UIT.O, config = { id = "tag_sprite", object = tag_sprite } },
+                                            tag_preview_ui,
                                         }
                                     },
                                 },
