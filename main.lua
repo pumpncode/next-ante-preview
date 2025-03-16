@@ -10,7 +10,40 @@ SMODS.Blind:take_ownership("ox", {
     loc_vars = function(self)
         return { vars = { G.GAME.current_round.most_played_poker_hand } }
     end,
+    preview_ui = function(self)
+        local hand_center = SMODS.PokerHands[G.GAME.current_round.most_played_poker_hand]
+        local hand_sprite = Sprite(0, 0, 1, 0.13 / 0.53,
+            G.ASSET_ATLAS[hand_center.atlas or "nap_poker_hands"], hand_center.pos or { x = 0, y = 0 })
+        return { n = G.UIT.O, config = { object = hand_sprite } }
+    end
 }, true)
+
+SMODS.Atlas({
+    key = "poker_hands",
+    path = "hands.png",
+    px = 53,
+    py = 13,
+})
+
+for index, handname in ipairs({
+    "High Card",
+    "Pair",
+    "Two Pair",
+    "Three of a Kind",
+    "Straight",
+    "Flush",
+    "Full House",
+    "Four of a Kind",
+    "Straight Flush",
+    "Five of a Kind",
+    "Flush House",
+    "Flush Five",
+}) do
+    SMODS.PokerHand:take_ownership(handname, {
+        atlas = "nap_poker_hands",
+        pos = { x = 0, y = index }
+    }, true)
+end
 
 function create_ante_preview()
     G.round_eval:get_UIE_by_ID("next_ante_preview").children = {}
@@ -48,6 +81,7 @@ function create_ante_preview()
                     blind_sprite.hover_tilt = 0
                 end
             end
+            local blind_preview_ui = blind.preview_ui and blind:preview_ui()
             local blind_amt = get_blind_amount(G.GAME.round_resets.blind_ante + 1)
                 * blind.mult * G.GAME.starting_params.ante_scaling
             local tag = prediction[choice].tag
@@ -68,7 +102,13 @@ function create_ante_preview()
                     nodes = { {
                         n = G.UIT.R,
                         nodes = {
-                            { n = G.UIT.O, config = { object = blind_sprite } },
+                            {
+                                n = G.UIT.C,
+                                nodes = {
+                                    { n = G.UIT.R, nodes = { { n = G.UIT.O, config = { object = blind_sprite } } } },
+                                    blind_preview_ui and { n = G.UIT.R, nodes = { blind_preview_ui } },
+                                }
+                            },
                             {
                                 n = G.UIT.C,
                                 nodes = {
