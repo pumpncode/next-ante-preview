@@ -6,6 +6,12 @@ function predict_next_ante()
     return { Small = { blind = "bl_small", tag = small_tag }, Big = { blind = "bl_big", tag = big_tag }, Boss = { blind = boss } }
 end
 
+SMODS.Blind:take_ownership("ox", {
+    loc_vars = function(self)
+        return { vars = { G.GAME.current_round.most_played_poker_hand } }
+    end,
+}, true)
+
 function create_ante_preview()
     G.round_eval:get_UIE_by_ID("next_ante_preview").children = {}
     local prediction = predict_next_ante()
@@ -15,6 +21,33 @@ function create_ante_preview()
             local blind_sprite = AnimatedSprite(0, 0, 1, 1,
                 G.ANIMATION_ATLAS[blind.atlas] or G.ANIMATION_ATLAS.blind_chips, blind.pos)
             blind_sprite:define_draw_steps({ { shader = 'dissolve', shadow_height = 0.05 }, { shader = 'dissolve' } })
+            blind_sprite.float = true
+            blind_sprite.states.hover.can = true
+            blind_sprite.states.drag.can = false
+            blind_sprite.states.collide.can = true
+            blind_sprite.config = { blind = blind, force_focus = true }
+            blind_sprite.hover = function()
+                if not G.CONTROLLER.dragging.target or G.CONTROLLER.using_touch then
+                    if not blind_sprite.hovering and blind_sprite.states.visible then
+                        blind_sprite.hovering = true
+                        blind_sprite.hover_tilt = 3
+                        blind_sprite:juice_up(0.05, 0.02)
+                        play_sound('chips1', math.random() * 0.1 + 0.55, 0.12)
+                        blind_sprite.config.h_popup = create_UIBox_blind_popup(blind, blind.discovered,
+                            blind.loc_vars and blind:loc_vars().vars or blind.vars)
+                        blind_sprite.config.h_popup_config = {
+                            align = 'cl',
+                            offset = { x = -0.1, y = 0 },
+                            parent = blind_sprite
+                        }
+                        Node.hover(blind_sprite)
+                    end
+                end
+                blind_sprite.stop_hover = function()
+                    blind_sprite.hovering = false; Node.stop_hover(blind_sprite)
+                    blind_sprite.hover_tilt = 0
+                end
+            end
             local blind_amt = get_blind_amount(G.GAME.round_resets.blind_ante + 1)
                 * blind.mult * G.GAME.starting_params.ante_scaling
             local tag = prediction[choice].tag
