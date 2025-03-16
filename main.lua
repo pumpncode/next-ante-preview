@@ -8,7 +8,6 @@ end
 
 function create_ante_preview()
     G.round_eval:get_UIE_by_ID("next_ante_preview").children = {}
-    local random_state = copy_table(G.GAME.pseudorandom)
     local prediction = predict_next_ante()
     for _, choice in ipairs({ "Small", "Big", "Boss" }) do
         if prediction[choice] then
@@ -68,7 +67,6 @@ function create_ante_preview()
             end
         end
     end
-    G.GAME.pseudorandom = random_state
 end
 
 local evaluate_round_hook = G.FUNCS.evaluate_round
@@ -77,6 +75,7 @@ function G.FUNCS.evaluate_round()
     if G.GAME.blind_on_deck == "Boss" then
         G.E_MANAGER:add_event(Event({
             func = function()
+                local random_state = copy_table(G.GAME.pseudorandom)
                 G.round_eval:add_child(
                     {
                         n = G.UIT.C,
@@ -88,6 +87,7 @@ function G.FUNCS.evaluate_round()
                     },
                     G.round_eval:get_UIE_by_ID("eval_bottom"))
                 create_ante_preview()
+                G.GAME.pseudorandom = random_state
                 return true
             end
         }))
