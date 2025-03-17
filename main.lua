@@ -115,6 +115,7 @@ function create_ante_preview()
                         nodes = {
                             {
                                 n = G.UIT.C,
+                                config = { maxw = 1 },
                                 nodes = {
                                     { n = G.UIT.R, nodes = { { n = G.UIT.O, config = { object = blind_sprite } } } },
                                     blind_preview_ui and { n = G.UIT.R, nodes = { blind_preview_ui } },
