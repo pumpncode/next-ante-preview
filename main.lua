@@ -8,7 +8,7 @@ end
 
 SMODS.Blind:take_ownership("ox", {
     loc_vars = function(self)
-        return { vars = { G.GAME.current_round.most_played_poker_hand } }
+        return { vars = { localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands') } }
     end,
     preview_ui = function(self)
         local hand_center = SMODS.PokerHands[G.GAME.current_round.most_played_poker_hand]
