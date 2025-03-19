@@ -18,6 +18,24 @@ SMODS.Blind:take_ownership("ox", {
     end
 }, true)
 
+SMODS.Tag:take_ownership("handy", {
+    preview_ui = function(self)
+        return { n = G.UIT.T, config = { text = localize("$") .. tostring(self.config.dollars_per_hand * (G.GAME.hands_played or 0)), colour = G.C.MONEY, scale = 0.4 } }
+    end
+}, true)
+
+SMODS.Tag:take_ownership("garbage", {
+    preview_ui = function(self)
+        return { n = G.UIT.T, config = { text = localize("$") .. tostring(self.config.dollars_per_discard * (G.GAME.unused_discards)), colour = G.C.MONEY, scale = 0.4 } }
+    end
+}, true)
+
+SMODS.Tag:take_ownership("skip", {
+    preview_ui = function(self)
+        return { n = G.UIT.T, config = { text = localize("$") .. tostring(self.config.skip_bonus * ((G.GAME.skips + 1) or 1)), colour = G.C.MONEY, scale = 0.4 } }
+    end
+}, true)
+
 SMODS.Tag:take_ownership("orbital", {
     preview_ui = function(self)
         local hand_center = SMODS.PokerHands[self.ability.orbital_hand]
