@@ -93,8 +93,12 @@ function create_ante_preview()
                         blind_sprite.hover_tilt = 3
                         blind_sprite:juice_up(0.05, 0.02)
                         play_sound('chips1', math.random() * 0.1 + 0.55, 0.12)
-                        blind_sprite.config.h_popup = create_UIBox_blind_popup(blind, blind.discovered,
-                            blind.loc_vars and blind:loc_vars().vars or blind.vars)
+                        local vars = blind.vars
+                        if blind.loc_vars then
+                            local locvars_return = blind:loc_vars()
+                            vars = locvars_return and locvars_return.vars or vars
+                        end
+                        blind_sprite.config.h_popup = create_UIBox_blind_popup(blind, blind.discovered, vars)
                         blind_sprite.config.h_popup_config = {
                             align = 'cl',
                             offset = { x = -0.1, y = 0 },
