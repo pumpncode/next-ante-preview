@@ -1,3 +1,9 @@
+---@alias Prediction { blind: string, tag: string? }
+---Precicts blinds and tags for the upcoming ante
+---
+---Hook note:<br>
+---Any changes made to `G.GAME.pseudorandom` will be reverted after this function is called
+---@return { Small: Prediction, Big: Prediction, Boss: Prediction }
 function predict_next_ante()
     local small_tag = get_next_tag_key()
     local big_tag = get_next_tag_key()
@@ -72,6 +78,12 @@ for index, handname in ipairs({
     }, true)
 end
 
+---Creates the preview for the upcoming ante
+---
+---Hook note:<br>
+---Any changes made to `G.GAME.pseudorandom` will be reverted after this function is called
+---
+---@see predict_next_ante for the information that is rendered here
 function create_ante_preview()
     G.round_eval:get_UIE_by_ID("next_ante_preview").children = {}
     local prediction = predict_next_ante()
