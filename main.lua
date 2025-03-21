@@ -171,7 +171,7 @@ function create_ante_preview()
                                         n = G.UIT.R,
                                         config = { align = "cl" },
                                         nodes = {
-                                            { n = G.UIT.T, config = { text = "or ", colour = G.C.WHITE, scale = 0.4 } },
+                                            { n = G.UIT.T, config = { text = localize("ph_or_sp"), colour = G.C.WHITE, scale = 0.4 } },
                                             { n = G.UIT.O, config = { id = "tag_sprite", object = tag_sprite } },
                                             tag_preview_ui,
                                         }
@@ -202,7 +202,7 @@ function G.FUNCS.evaluate_round()
                         n = G.UIT.C,
                         config = { r = 0.1, colour = G.C.BLACK, emboss = 0.05 },
                         nodes = {
-                            { n = G.UIT.R, config = { padding = 0.1 },                          nodes = { { n = G.UIT.T, config = { text = "Next Ante:", colour = G.C.WHITE, scale = 0.5 } } } },
+                            { n = G.UIT.R, config = { padding = 0.1 },                          nodes = { { n = G.UIT.T, config = { text = localize("ph_next_ante"), colour = G.C.WHITE, scale = 0.5 } } } },
                             { n = G.UIT.R, config = { id = "next_ante_preview", padding = 0.1 } },
                         }
                     },
