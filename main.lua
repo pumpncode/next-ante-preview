@@ -124,7 +124,8 @@ function create_ante_preview()
                     blind_sprite.hover_tilt = 0
                 end
             end
-            local blind_preview_ui = blind.preview_ui and blind:preview_ui()
+            local blind_preview_ui = SMODS.Mods.AntePreview.config.custom_UI and blind.preview_ui and blind:preview_ui()
+                or nil
             local blind_amt = get_blind_amount(G.GAME.round_resets.blind_ante + 1)
                 * blind.mult * G.GAME.starting_params.ante_scaling
             local tag = prediction[choice].tag
@@ -140,7 +141,8 @@ function create_ante_preview()
                 tag_object = Tag(tag, nil, choice)
                 G.orbital_hand = nil
                 _, tag_sprite = tag_object:generate_UI(0.4)
-                tag_preview_ui = G.P_TAGS[tag].preview_ui and G.P_TAGS[tag].preview_ui(tag_object)
+                tag_preview_ui = SMODS.Mods.AntePreview.config.custom_UI and G.P_TAGS[tag].preview_ui and
+                    G.P_TAGS[tag].preview_ui(tag_object) or nil
             end
             G.round_eval:add_child({
                     n = G.UIT.C,
