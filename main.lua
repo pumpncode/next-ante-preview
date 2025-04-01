@@ -25,26 +25,26 @@ SMODS.Blind:take_ownership("ox", {
 }, true)
 
 SMODS.Tag:take_ownership("handy", {
-    preview_ui = function(self)
-        return { n = G.UIT.T, config = { text = localize("$") .. tostring(self.config.dollars_per_hand * (G.GAME.hands_played or 0)), colour = G.C.MONEY, scale = 0.4 } }
+    preview_ui = function(self, tag)
+        return { n = G.UIT.T, config = { text = localize("$") .. tostring(tag.config.dollars_per_hand * (G.GAME.hands_played or 0)), colour = G.C.MONEY, scale = 0.4 } }
     end
 }, true)
 
 SMODS.Tag:take_ownership("garbage", {
-    preview_ui = function(self)
-        return { n = G.UIT.T, config = { text = localize("$") .. tostring(self.config.dollars_per_discard * (G.GAME.unused_discards)), colour = G.C.MONEY, scale = 0.4 } }
+    preview_ui = function(self, tag)
+        return { n = G.UIT.T, config = { text = localize("$") .. tostring(tag.config.dollars_per_discard * (G.GAME.unused_discards)), colour = G.C.MONEY, scale = 0.4 } }
     end
 }, true)
 
 SMODS.Tag:take_ownership("skip", {
-    preview_ui = function(self)
-        return { n = G.UIT.T, config = { text = localize("$") .. tostring(self.config.skip_bonus * ((G.GAME.skips + 1) or 1)), colour = G.C.MONEY, scale = 0.4 } }
+    preview_ui = function(self, tag)
+        return { n = G.UIT.T, config = { text = localize("$") .. tostring(tag.config.skip_bonus * ((G.GAME.skips + 1) or 1)), colour = G.C.MONEY, scale = 0.4 } }
     end
 }, true)
 
 SMODS.Tag:take_ownership("orbital", {
-    preview_ui = function(self)
-        local hand_center = SMODS.PokerHands[self.ability.orbital_hand]
+    preview_ui = function(self, tag)
+        local hand_center = SMODS.PokerHands[tag.ability.orbital_hand]
         local hand_sprite = Sprite(0, 0, 1, 0.13 / 0.53,
             G.ASSET_ATLAS[hand_center.atlas or "nap_poker_hands"], hand_center.pos or { x = 0, y = 0 })
         return { n = G.UIT.O, config = { object = hand_sprite } }
@@ -142,7 +142,7 @@ function create_ante_preview()
                 G.orbital_hand = nil
                 _, tag_sprite = tag_object:generate_UI(0.4)
                 tag_preview_ui = SMODS.Mods.AntePreview.config.custom_UI and G.P_TAGS[tag].preview_ui and
-                    G.P_TAGS[tag].preview_ui(tag_object) or nil
+                    G.P_TAGS[tag]:preview_ui(tag_object) or nil
             end
             G.round_eval:add_child({
                     n = G.UIT.C,
