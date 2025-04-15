@@ -7,7 +7,7 @@
     "description": "Shows a preview of the next ante on the Boss Blind's cash out screen.",
     "prefix": "nap",
     "main_file": "main.lua",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "priority": -1e6,
     "dependencies": [
         "Steamodded (>=1.0.0~ALPHA-1021a)"
