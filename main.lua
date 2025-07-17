@@ -9,7 +9,7 @@ function predict_next_ante()
     local big_tag = get_next_tag_key()
     local boss = get_new_boss()
     G.GAME.bosses_used[boss] = G.GAME.bosses_used[boss] - 1
-    if SMODS.find_mod("cartomancer") then
+    if next(SMODS.find_mod("cartomancer")) then
         G.GAME.cartomancer_bosses_list[#G.GAME.cartomancer_bosses_list] = nil
     end
     return { Small = { blind = "bl_small", tag = small_tag }, Big = { blind = "bl_big", tag = big_tag }, Boss = { blind = boss } }
